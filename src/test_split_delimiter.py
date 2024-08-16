@@ -45,9 +45,9 @@ class TestSplitDelimiter(unittest.TestCase):
         self.assertEqual(new_nodes, compare)
         
     def test_split_nodes_delimiter_multiple_different_delimiters(self):
-        node = TextNode("This is text with a `code block` word *bold text* `code block`", text_type_text)
+        node = TextNode("This is text with a `code block` word **bold text** `code block`", text_type_text)
         new_nodes = split_nodes_delimiter([node], "`", text_type_code)
-        new_nodes = split_nodes_delimiter(new_nodes, "*", text_type_bold)
+        new_nodes = split_nodes_delimiter(new_nodes, "**", text_type_bold)
         compare = [
             TextNode("This is text with a ", text_type_text),
             TextNode("code block", text_type_code),
@@ -66,7 +66,7 @@ class TestSplitImage(unittest.TestCase):
         new_nodes = split_nodes_image([node])
         compare = [
             TextNode("This is text with an ", text_type_text),
-            TextNode("![image](https://example.com/image.png)", text_type_image),
+            TextNode("image", text_type_image, "https://example.com/image.png"),
         ]
         self.assertEqual(new_nodes, compare)
         
@@ -81,23 +81,23 @@ class TestSplitImage(unittest.TestCase):
         new_nodes = split_nodes_image([node])
         compare = [
             TextNode("This is text with an ", text_type_text),
-            TextNode("![image](https://example.com/image.png)", text_type_image),
+            TextNode("image", text_type_image, "https://example.com/image.png"),
             TextNode(" ", text_type_text),
-            TextNode("![image](https://example.com/image2.png)", text_type_image),
+            TextNode("image", text_type_image, "https://example.com/image2.png"),
         ]
         self.assertEqual(new_nodes, compare)
         
     def test_split_nodes_image_multiple_different_nodes(self):
-        node = TextNode("This is text with an ![image](https://example.com/image.png) *bold text* ![image](https://example.com/image2.png)", text_type_text)
+        
+        node = TextNode("This is text with an ![image](https://example.com/image.png) **bold text** ![image](https://example.com/image2.png)", text_type_text)
         new_nodes = split_nodes_image([node])
-        new_nodes = split_nodes_delimiter(new_nodes, "*", text_type_bold)
         compare = [
             TextNode("This is text with an ", text_type_text),
-            TextNode("![image](https://example.com/image.png)", text_type_image),
+            TextNode("image", text_type_image, "https://example.com/image.png"),
             TextNode(" ", text_type_text),
             TextNode("bold text", text_type_bold),
             TextNode(" ", text_type_text),
-            TextNode("![image](https://example.com/image2.png)", text_type_image),
+            TextNode("image", text_type_image, "https://example.com/image2.png"),
         ]
         self.assertEqual(new_nodes, compare)
         
@@ -108,7 +108,7 @@ class TestSplitLink(unittest.TestCase):
         new_nodes = split_nodes_link([node])
         compare = [
             TextNode("This is text with a ", text_type_text),
-            TextNode("[link](https://example.com/link)", text_type_link),
+            TextNode("link", text_type_link,"https://example.com/link"),
         ]
         self.assertEqual(new_nodes, compare)
         
@@ -123,40 +123,26 @@ class TestSplitLink(unittest.TestCase):
         new_nodes = split_nodes_link([node])
         compare = [
             TextNode("This is text with a ", text_type_text),
-            TextNode("[link](https://example.com/link)", text_type_link),
+            TextNode("link", text_type_link,"https://example.com/link"),
             TextNode(" ", text_type_text),
-            TextNode("[link](https://example.com/link2)", text_type_link),
+            TextNode("link", text_type_link,"https://example.com/link2"),
         ]
         self.assertEqual(new_nodes, compare)
         
     def test_split_nodes_link_multiple_different_nodes(self):
-        node = TextNode("This is text with a [link](https://example.com/link) *bold text* [link](https://example.com/link2)", text_type_text)
+        node = TextNode("This is text with a [link](https://example.com/link) **bold text** [link](https://example.com/link2)", text_type_text)
         new_nodes = split_nodes_link([node])
-        new_nodes = split_nodes_delimiter(new_nodes, "*", text_type_bold)
         compare = [
             TextNode("This is text with a ", text_type_text),
-            TextNode("[link](https://example.com/link)", text_type_link),
+            TextNode("link", text_type_link,"https://example.com/link"),
             TextNode(" ", text_type_text),
             TextNode("bold text", text_type_bold),
             TextNode(" ", text_type_text),
-            TextNode("[link](https://example.com/link2)", text_type_link),
+            TextNode("link", text_type_link,"https://example.com/link2"),
         ]
         self.assertEqual(new_nodes, compare)
         
-    def test_split_nodes_link_multiple_different_nodes(self):
-        node = TextNode("This is text with a [link](https://example.com/link) *bold text* [link](https://example.com/link2)", text_type_text)
-        new_nodes = split_nodes_link([node])
-        new_nodes = split_nodes_delimiter(new_nodes, "*", text_type_bold)
-        compare = [
-            TextNode("This is text with a ", text_type_text),
-            TextNode("[link](https://example.com/link)", text_type_link),
-            TextNode(" ", text_type_text),
-            TextNode("bold text", text_type_bold),
-            TextNode(" ", text_type_text),
-            TextNode("[link](https://example.com/link2)", text_type_link),
-        ]
-        self.assertEqual(new_nodes, compare)
-        
+
     
 
 if __name__ == "__main__":
