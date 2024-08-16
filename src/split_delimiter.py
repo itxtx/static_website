@@ -150,3 +150,21 @@ def markdown_to_blocks(markdown):
     blocks = [block for block in blocks if block]
 
     return blocks
+
+
+
+
+def block_to_block_type(block):
+    lines = block.strip().split("\n")
+    if block.startswith("#"):
+        return "heading"
+    elif block.startswith("`"):
+        return "code"
+    elif block.startswith(">"):
+            return "quote"
+    elif all(line.strip().startswith(("*", "-")) for line in lines):
+        return "unordered_list"
+    elif all(line.strip().startswith(f"{i+1}. ") for i, line in enumerate(lines)): #enumerate gives the index of the line ; need to start at 1
+        return "ordered_list"
+    else:
+        return "paragraph"
