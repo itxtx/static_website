@@ -1,6 +1,6 @@
 import unittest
 
-from split_delimiter import extract_markdown_images, extract_markdown_links, parse_markdown_to_text_nodes
+from split_delimiter import extract_markdown_images, extract_markdown_links
 
 class TestExtract(unittest.TestCase):
     

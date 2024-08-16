@@ -1,6 +1,6 @@
 import unittest
 
-from split_delimiter import TextNode, split_nodes_delimiter, split_nodes_image, split_nodes_link
+from split_delimiter import TextNode, split_nodes_delimiter, split_nodes_image, split_nodes_link, text_to_text_nodes, markdown_to_blocks
 
 
 
@@ -142,8 +142,54 @@ class TestSplitLink(unittest.TestCase):
         ]
         self.assertEqual(new_nodes, compare)
         
-
+class Test_parse(unittest.TestCase):
     
+    def test_parse_markdown_to_text_nodes(self):
+        text = "This is **bold** and *italic* and `code` and [link](https://example.com/link) and ![image](https://example.com/image.png)"
+        nodes = text_to_text_nodes(text)
+        compare = [
+            TextNode("This is ", text_type_text),
+            TextNode("bold", text_type_bold),
+            TextNode(" and ", text_type_text),
+            TextNode("italic", text_type_italic),
+            TextNode(" and ", text_type_text),
+            TextNode("code", text_type_code),
+            TextNode(" and ", text_type_text),
+            TextNode("link", text_type_link, "https://example.com/link"),
+            TextNode(" and ", text_type_text),
+            TextNode("image", text_type_image, "https://example.com/image.png"),
+        ]
+        self.assertEqual(nodes, compare)
+    
+
+class TestMarkdownToBlocks(unittest.TestCase):
+    
+    def test_markdown_to_blocks(self):
+        text = "# This is a heading\n\n This is a paragraph of text. It has some **bold** and *italic* words inside of it.\n\n * This is the first list item in a list block\n* This is a list item\n* This is another list item"
+        compare = ["# This is a heading","This is a paragraph of text. It has some **bold** and *italic* words inside of it.","* This is the first list item in a list block\n* This is a list item\n* This is another list item"]
+        blocks = markdown_to_blocks(text)
+        self.assertEqual(blocks, compare)
+
+    def test_markdown_to_blocks_no_heading(self):
+        text = "This is a paragraph of text. It has some **bold** and *italic* words inside of it.\n\n * This is the first list item in a list block\n* This is a list item\n* This is another list item"
+        compare = ["This is a paragraph of text. It has some **bold** and *italic* words inside of it.","* This is the first list item in a list block\n* This is a list item\n* This is another list item"]
+        blocks = markdown_to_blocks(text)
+        self.assertEqual(blocks, compare)
+        
+    def test_markdown_to_blocks_no_paragraph(self):
+        text = "# This is a heading\n\n* This is the first list item in a list block\n* This is a list item\n* This is another list item"
+        compare = ["# This is a heading","* This is the first list item in a list block\n* This is a list item\n* This is another list item"]
+        blocks = markdown_to_blocks(text)
+        self.assertEqual(blocks, compare)
+    
+    def test_markdown_to_blocks_check_whitespace(self):
+        text = "# This is a heading\n\n\n\n\n                                              This is a paragraph of text. It has some **bold** and *italic* words inside of it.\n\n * This is the first list item in a list block\n* This is a list item\n* This is another list item\n\n"
+        compare = ["# This is a heading","This is a paragraph of text. It has some **bold** and *italic* words inside of it.","* This is the first list item in a list block\n* This is a list item\n* This is another list item"]
+        blocks = markdown_to_blocks(text)
+        self.assertEqual(blocks, compare)
+
+
+
 
 if __name__ == "__main__":
     unittest.main()

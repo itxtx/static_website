@@ -26,14 +26,14 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
     return new_list
 
 
-def parse_markdown_to_text_nodes(markdown_text):
+def text_to_text_nodes(text):
     text_type_text = "text"
     text_type_bold = "bold"
     text_type_italic = "italic"
     text_type_code = "code"
 
     # Start with a single node containing all text
-    nodes = [TextNode(markdown_text, text_type_text)]
+    nodes = [TextNode(text, text_type_text)]
 
     # Handle each type of delimiter
     nodes = split_nodes_delimiter(nodes, "`", text_type_code)
@@ -85,7 +85,7 @@ def split_nodes_image(old_nodes):
 
             # Add text before the image
             if start_index > cursor:
-                new_list.extend(parse_markdown_to_text_nodes(text[cursor:start_index]))
+                new_list.extend(text_to_text_nodes(text[cursor:start_index]))
 
             # Add the image node
             new_list.append(TextNode(image_alt, text_type_image, image_link))
@@ -95,7 +95,7 @@ def split_nodes_image(old_nodes):
 
         # Add any remaining text after the last image
         if cursor < len(text):
-            new_list.extend(parse_markdown_to_text_nodes(text[cursor:]))
+            new_list.extend(text_to_text_nodes(text[cursor:]))
 
     return new_list
 
@@ -123,7 +123,7 @@ def split_nodes_link(old_nodes):
 
             # Add the text before the link as a text node
             if start_index > cursor:
-                new_list.extend(parse_markdown_to_text_nodes(text[cursor:start_index]))
+                new_list.extend(text_to_text_nodes(text[cursor:start_index]))
 
             # Add the link as a link node
             new_list.append(TextNode(alt, text_type_link, url))
@@ -133,7 +133,20 @@ def split_nodes_link(old_nodes):
 
         # Add any remaining text after the last link
         if cursor < len(text):
-            new_list.extend(parse_markdown_to_text_nodes(text[cursor:]))
+            new_list.extend(text_to_text_nodes(text[cursor:]))
 
     return new_list
 
+
+
+def markdown_to_blocks(markdown):
+    # Split the markdown text into blocks
+    blocks = markdown.split("\n\n")
+
+    # Remove leading and trailing whitespace from each block
+    blocks = [block.strip() for block in blocks]
+
+    # Remove empty blocks
+    blocks = [block for block in blocks if block]
+
+    return blocks
