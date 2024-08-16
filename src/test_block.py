@@ -55,6 +55,7 @@ class TestBlockToBlockType(unittest.TestCase):
         block = "1. This is the first list item in a list block\n2. This is a list item\n3. This is another list item"
         block_type = block_to_block_type(block)
         self.assertEqual(block_type, "ordered_list")
+        
     def test_block_to_block_type_ordered_list2(self):
         block = "1. This is the first list item in a list block\n1. This is a list item\n1. This is another list item"
         block_type = block_to_block_type(block)
