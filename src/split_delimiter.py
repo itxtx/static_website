@@ -61,57 +61,6 @@ def extract_markdown_links(text):
     return links if links else None
 
 
-def split_nodes_image2(old_nodes):
-    text_type_image = "image"
-    new_list = []
-    
-    for node in old_nodes:
-        if node.text_type != "text":
-            new_list.append(node)
-            continue
-
-        text = node.text
-        images = extract_markdown_images(text)
-        if not images:
-            new_list.append(node)
-            continue
-
-        for (image_alt, image_link) in images:
-            sections = text.split(f"![{image_alt}]({image_link})")
-            for i, section in enumerate(sections):
-                if section:
-                    new_list.extend(parse_markdown_to_text_nodes(section))
-                if i < len(sections) - 1:
-                    new_list.append(TextNode(image_alt, text_type_image, image_link))
-    
-    return new_list
-
-
-def split_nodes_link2(old_nodes):
-    text_type_link = "link"
-    new_list = []
-
-    for node in old_nodes:
-        if node.text_type != "text":
-            new_list.append(node)
-            continue
-
-        text = node.text
-        links = extract_markdown_links(text)
-        if not links:
-            new_list.append(node)
-            continue
-
-        for (alt, url) in links:
-            sections = text.split(f"[{alt}]({url})")
-            for i, section in enumerate(sections):
-                if section:
-                    new_list.extend(parse_markdown_to_text_nodes(section))
-                if i < len(sections) - 1:
-                    new_list.append(TextNode(alt, text_type_link, url))
-
-    return new_list
-
 
 def split_nodes_image(old_nodes):
     text_type_text = "text"
