@@ -161,7 +161,7 @@ def block_to_block_type(block):
     elif block.startswith("`"):
         return "code"
     elif block.startswith(">"):
-            return "quote"
+        return "quote"
     elif all(line.strip().startswith(("*", "-")) for line in lines):
         return "unordered_list"
     elif all(line.strip().startswith(f"{i+1}. ") for i, line in enumerate(lines)): #enumerate gives the index of the line ; need to start at 1

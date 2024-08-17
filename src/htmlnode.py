@@ -7,15 +7,14 @@ class HTMLNode:
         self.children = children or []
         
     def to_html(self):
-        raise NotImplementedError
         if self.tag is None:
-            raise ValueError("HTMLNode must have a tag.")
+            return self.value or ""
         children_html = "".join([child.to_html() for child in self.children])
         props_html = self.props_to_html()
-        if props_html:
-            return f"<{self.tag} {props_html}>{children_html}</{self.tag}>"
-        else:
-            return f"<{self.tag}>{children_html}</{self.tag}>"
+        if self.value:
+            return f"<{self.tag}{props_html}>{self.value}</{self.tag}>"
+        return f"<{self.tag}{props_html}>{children_html}</{self.tag}>"
+
         
     def props_to_html(self):
         if not self.props:
@@ -75,17 +74,3 @@ class ParentNode(HTMLNode):
         
 
 
-def text_node_to_html_node(text_node):
-    mapping = {
-        "text": lambda tn: LeafNode(tn.text),
-        "bold": lambda tn: LeafNode(tn.text, "b"),
-        "italic": lambda tn: LeafNode(tn.text, "i"),
-        "code": lambda tn: LeafNode(tn.text, "code"),
-        "link": lambda tn: LeafNode(tn.text, "a", {"href": tn.url}),
-        "image": lambda tn: LeafNode("", "img", {"src": tn.url, "alt": tn.text}),
-    }
-
-    if text_node.text_type in mapping:
-        return mapping[text_node.text_type](text_node)
-    else:
-        raise Exception(f"Unknown text type: {text_node.text_type}")
