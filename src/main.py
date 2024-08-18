@@ -77,12 +77,7 @@ def generate_page(from_path, template_path, dest_path):
     
     
 def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
-##Crawl every entry in the content directory
-##For each markdown file found, generate a new .html file using the same template.html. The generated pages should be written to the public directory in the same directory structure.
-#os.listdir
-#os.path.join
-#os.path.isfile
-#pathlib.Path
+    
     print(f"dir_path_content: {dir_path_content}  ||  template_path: {template_path}  ||  dest_dir_path: {dest_dir_path}")
     for entry in os.listdir(dir_path_content):
         entry_path = os.path.join(dir_path_content, entry)
