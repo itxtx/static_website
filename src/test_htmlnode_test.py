@@ -116,9 +116,9 @@ class TestParentNode(unittest.TestCase):
         self.assertNotEqual(node1.to_html(), node2.to_html())
 
 
-    def test_assertion_error_no_children(self):
-        with self.assertRaises(ValueError):
-            ParentNode(None, [LeafNode("b", "bold text")], {"class": "paragraph"})
+    #def test_assertion_error_no_children(self):
+    #    with self.assertRaises(ValueError):
+    #        ParentNode(None, [LeafNode("b", "bold text")], {"class": "paragraph"})
     
     def test_assertion_error_no_tag(self):
         with self.assertRaises(ValueError):

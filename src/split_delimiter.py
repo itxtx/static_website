@@ -13,6 +13,7 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
 
         # Split the text by the delimiter
         parts = node.text.split(delimiter)
+        print(f"delimiter: {delimiter}  ||  node: {node.text}   ||      parts: {parts}")
 
         for i, part in enumerate(parts):
             if part:
@@ -21,7 +22,7 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
 
         # Check for unclosed delimiters
         if len(parts) % 2 == 0:
-            raise ValueError(f"Unmatched delimiter {delimiter} found in text: {node.text}")
+            raise ValueError(f"Unmatched delimiter {delimiter} found in text: {node.text}") ### errror somehwere here
 
     return new_list
 
@@ -155,10 +156,17 @@ def markdown_to_blocks(markdown):
 
 
 def block_to_block_type(block):
-    lines = block.strip().split("\n")
-    if block.startswith("#"):
+    lines = block.split("\n")
+    if (
+        block.startswith("# ")
+        or block.startswith("## ")
+        or block.startswith("### ")
+        or block.startswith("#### ")
+        or block.startswith("##### ")
+        or block.startswith("###### ")
+    ):
         return "heading"
-    elif block.startswith("`"):
+    elif lines[0].startswith("```") and lines[-1].startswith("```"):
         return "code"
     elif block.startswith(">"):
         return "quote"

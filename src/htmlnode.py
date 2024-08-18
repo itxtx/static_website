@@ -7,6 +7,7 @@ class HTMLNode:
         self.children = children or []
         
     def to_html(self):
+        raise NotImplementedError()
         if self.tag is None:
             return self.value or ""
         children_html = "".join([child.to_html() for child in self.children])
@@ -31,10 +32,10 @@ class HTMLNode:
     
 class LeafNode(HTMLNode):
         
-    def __init__(self, value,tag=None, props=None):
+    def __init__(self, tag=None, value=None,props=None):
         if value is None:
             raise ValueError("LeafNode must have a value.")
-        super().__init__(tag, value, props=props)
+        super().__init__(tag,value,props=props)
         
     def to_html(self):
         if self.tag is None:
@@ -51,10 +52,10 @@ class LeafNode(HTMLNode):
             
 
 class ParentNode(HTMLNode):
-    def __init__(self, children, tag=None, props=None):
+    def __init__(self,  tag=None,children=None, props=None):
         if children is None:
             raise ValueError("ParentNode must have a child.")
-        super().__init__(tag, children, props=props)
+        super().__init__(tag=tag, children=children, props=props)
     
     def to_html(self):
         if self.tag is None:
@@ -62,7 +63,7 @@ class ParentNode(HTMLNode):
         if self.children is None:
             raise ValueError("ParentNode must have a child.")
         
-        children_html = " ".join([child.to_html() for child in self.children])
+        children_html = "".join([child.to_html() for child in self.children])
         props_html = self.props_to_html()
         if props_html:
             return f"<{self.tag} {props_html}>{children_html}</{self.tag}>"

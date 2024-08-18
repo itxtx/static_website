@@ -62,7 +62,7 @@ class TestBlockToBlockType(unittest.TestCase):
         self.assertEqual(block_type, "paragraph")
         
     def test_block_to_block_type_code(self):
-        block = "`This is a code block`"
+        block = "```\nThis is a code block\n```"
         block_type = block_to_block_type(block)
         self.assertEqual(block_type, "code")
         
