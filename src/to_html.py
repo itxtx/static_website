@@ -14,6 +14,7 @@ def text_node_to_html_node(text_node):
     }
     #print(f"Processing text node: {text_node} as {mapping[text_node.text_type](text_node)}")
     if text_node.text_type in mapping:
+        #print(f"Processing text node: {text_node} as {mapping[text_node.text_type](text_node)}\n")
         return mapping[text_node.text_type](text_node)
     else:
         raise Exception(f"Unknown text type: {text_node.text_type}")

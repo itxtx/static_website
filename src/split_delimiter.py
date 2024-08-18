@@ -19,6 +19,9 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
             if part:
                 current_text_type = text_type if i % 2 == 1 else text_type_text
                 new_list.append(TextNode(part, current_text_type))
+                           # Recursively process the newly created text nodes if they are still of type text
+                #if current_text_type == text_type_text:
+                #    new_list.extend(text_to_text_nodes(part))
 
         # Check for unclosed delimiters
         if len(parts) % 2 == 0:
@@ -32,7 +35,7 @@ def text_to_text_nodes(text):
     text_type_bold = "bold"
     text_type_italic = "italic"
     text_type_code = "code"
-
+    #print(f"TEXT TO TEXT NODES: {text}")
     # Start with a single node containing all text
     nodes = [TextNode(text, text_type_text)]
 
@@ -44,20 +47,20 @@ def text_to_text_nodes(text):
     # Handle images and links separately after text processing
     nodes = split_nodes_image(nodes)
     nodes = split_nodes_link(nodes)
-    #print(f"text: {text}  ||  node: {nodes} ")
+    #print(f"XXXXXXXXXXXXXXXXXXXXX text: {text}  ||  node: {nodes}")
     return nodes
 
 
 def extract_markdown_images(text):
     # Regular expression to find markdown images
-    image_pattern = r'!\[([^\]]*)\]\((https?://[^\)]+)\)'
+    image_pattern = r'!\[([^\]]*)\]\(([^\)]+)\)'
     images = re.findall(image_pattern, text)
     return images if images else None
 
 
 def extract_markdown_links(text):
     # Regular expression to find markdown links
-    link_pattern = r'\[([^\]]*)\]\((https?://[^\)]+)\)'
+    link_pattern = r'\[([^\]]*)\]\(([^\)]+)\)'
     links = re.findall(link_pattern, text)
     return links if links else None
 
@@ -105,6 +108,7 @@ def split_nodes_image(old_nodes):
 def split_nodes_link(old_nodes):
     text_type_link = "link"
     new_list = []
+    #xprint("SPLIT NODES LINK")
 
     for node in old_nodes:
         if node.text_type != "text":
