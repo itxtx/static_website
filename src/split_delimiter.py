@@ -13,7 +13,7 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
 
         # Split the text by the delimiter
         parts = node.text.split(delimiter)
-        print(f"delimiter: {delimiter}  ||  node: {node.text}   ||      parts: {parts}")
+        #print(f"delimiter: {delimiter}  ||  node: {node.text}   ||      parts: {parts}")
 
         for i, part in enumerate(parts):
             if part:
@@ -44,7 +44,7 @@ def text_to_text_nodes(text):
     # Handle images and links separately after text processing
     nodes = split_nodes_image(nodes)
     nodes = split_nodes_link(nodes)
-
+    #print(f"text: {text}  ||  node: {nodes} ")
     return nodes
 
 
@@ -125,9 +125,11 @@ def split_nodes_link(old_nodes):
             # Add the text before the link as a text node
             if start_index > cursor:
                 new_list.extend(text_to_text_nodes(text[cursor:start_index]))
+                #print(f"\n\n___________________________\n\ncursor: {cursor}  ||  start_index: {start_index}  ||  text: {text}  ||  text[cursor:start_index]: {text[cursor:start_index]}")
 
             # Add the link as a link node
             new_list.append(TextNode(alt, text_type_link, url))
+            #print(f"new_list: {new_list}")
 
             # Update the cursor position to after the current link
             cursor = start_index + len(link_text)
@@ -170,7 +172,7 @@ def block_to_block_type(block):
         return "code"
     elif block.startswith(">"):
         return "quote"
-    elif all(line.strip().startswith(("*", "-")) for line in lines):
+    elif all(line.strip().startswith(("* ", "- ")) for line in lines):
         return "unordered_list"
     elif all(line.strip().startswith(f"{i+1}. ") for i, line in enumerate(lines)): #enumerate gives the index of the line ; need to start at 1
         return "ordered_list"

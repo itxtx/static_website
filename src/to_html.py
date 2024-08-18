@@ -108,7 +108,7 @@ def olist_to_html_node(block):
     for item in items:
         text = item[item.find(".") + 2:].strip()  # Strip leading numbering
         children = text_to_children(text)
-        html_items.append(ParentNode("li",html_items))
+        html_items.append(ParentNode("li",children))
     #print(f"Processing heading block: {block} as {ParentNode("ol",html_items)}")
     return ParentNode("ol",html_items)
 
@@ -118,7 +118,7 @@ def ulist_to_html_node(block):
     for item in items:
         text = item[2:].strip()  # Strip leading bullet
         children = text_to_children(text)
-        html_items.append(ParentNode("li",html_items))
+        html_items.append(ParentNode("li",children))
     #print(f"Processing heading block: {block} as {ParentNode("ul",html_items)}")
     return ParentNode("ul",html_items)
 

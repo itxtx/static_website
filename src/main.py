@@ -1,7 +1,7 @@
 import os
 import shutil
 from to_html import markdown_to_html_node
-
+from htmlnode import HTMLNode, LeafNode, ParentNode
 
 
 def main():
@@ -55,8 +55,10 @@ def generate_page(from_path, template_path, dest_path):
     with open(template_path, "r") as file:
         template = file.read()
     # Replace the placeholders in the template with the content and title
-    template = template.replace("{{Content}}", node)
-    template = template.replace("{{Title}}", title)
+    print(f"title: {title}; node: {node.to_html}\n")  
+    template = template.replace("{{Title}}",f"{title}")
+    template = template.replace("Content",f"{node.to_html()}")
+    
 
     # Write the generated content to the destination file
     with open(dest_path, "w") as file:
