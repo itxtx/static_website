@@ -14,6 +14,7 @@ def main():
     content_path = 'content'   
     template_path =  'template.html'
     dest_path = 'public'
+    #generate_page('content/index.md', template_path, 'public/index.html')
     generate_pages_recursive(content_path, template_path, dest_path)
 
 def recursive_static_to_public(src, dest):
@@ -26,7 +27,8 @@ def recursive_static_to_public(src, dest):
     for item in os.listdir(src):
         src_path = os.path.join(src, item)
         dest_path = os.path.join(dest, item)
-
+        #print(f"src_path: {src_path}  ||  dest_path: {dest_path}")  # Logging
+        
         if os.path.isdir(src_path):
             # If the item is a directory, ensure it exists in the destination and recurse
             if not os.path.exists(dest_path):
@@ -34,7 +36,7 @@ def recursive_static_to_public(src, dest):
             recursive_static_to_public(src_path, dest_path)
         elif os.path.isfile(src_path):
             # If the item is a file, copy it to the corresponding destination directory
-            shutil.copy2(src_path, dest_path)
+            shutil.copy(src_path, dest_path)
             print(f"Copying {src_path} to {dest_path}")  # Logging
 
 def extract_title(markdown):
@@ -81,11 +83,15 @@ def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
 #os.path.join
 #os.path.isfile
 #pathlib.Path
-
+    print(f"dir_path_content: {dir_path_content}  ||  template_path: {template_path}  ||  dest_dir_path: {dest_dir_path}")
     for entry in os.listdir(dir_path_content):
         entry_path = os.path.join(dir_path_content, entry)
+        exit_path = os.path.join(dest_dir_path, entry)
+        print(f"entry: {entry}  ||  entry_path: {entry_path} ||  exit_path: {exit_path}")
         if os.path.isdir(entry_path):
-            generate_pages_recursive(entry_path, template_path, dest_dir_path)
+            if not os.path.exists(exit_path):
+                os.makedirs(exit_path)
+            generate_pages_recursive(entry_path, template_path, exit_path)
         elif entry.endswith(".md"):
             # Generate the destination path for the new HTML file
             entry_name = os.path.splitext(entry)[0]
